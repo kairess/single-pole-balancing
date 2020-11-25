@@ -49,7 +49,6 @@ while sim.t < 120.0:
         lx=25 * scale,
         ly=12.5 * scale,
         xy=(150 * scale, 80 * scale),
-        stroke_width=1,
         fill=(0, 1, 0)
     )
 
@@ -59,7 +58,6 @@ while sim.t < 120.0:
         lx=5,
         ly=12.5 * scale,
         xy=(150 * scale - force_direction * (25 * scale) / 2, 80 * scale),
-        stroke_width=0,
         fill=(1, 0, 0)
     )
 
@@ -68,13 +66,19 @@ while sim.t < 120.0:
         force_rect
     ])
 
+    star = gz.star(radius=30, fill=(1, 1, 0), xy=(150 * scale, 25 * scale), angle=-math.pi / 2)
+
     pole = gz.rectangle(
-        lx=5 * scale,
+        lx=2.5 * scale,
         ly=50 * scale,
         xy=(150 * scale, 55 * scale),
-        stroke_width=1,
         fill=(1, 1, 0)
     )
+
+    pole_group = gz.Group([
+        pole,
+        star
+    ])
 
     # convert position to display units
     visX = sim.x * 50 * scale
@@ -85,7 +89,7 @@ while sim.t < 120.0:
     # draw cart, pole and text
     group = gz.Group([
         cart_group.translate((visX, 0)),
-        pole.translate((visX, 0)).rotate(sim.theta, center=(150 * scale + visX, 80 * scale)),
+        pole_group.translate((visX, 0)).rotate(sim.theta, center=(150 * scale + visX, 80 * scale)),
         gz.text('Time %.2f (Fitness %.2f)' % (sim.t, genome.fitness), fontfamily='NanumGothic', fontsize=20, fill=(1, 1, 1), xy=(10, 25), fontweight='bold', v_align='top', h_align='left'),
         gz.text('x: %.2f' % (sim.x,), fontfamily='NanumGothic', fontsize=20, fill=(1, 1, 1), xy=(10, 50), fontweight='bold', v_align='top', h_align='left'),
         gz.text('dx: %.2f' % (sim.dx,), fontfamily='NanumGothic', fontsize=20, fill=(1, 1, 1), xy=(10, 75), fontweight='bold', v_align='top', h_align='left'),
