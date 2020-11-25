@@ -15,8 +15,12 @@ initial_values = {
     'dtheta': 1
 }
 
+simulation_seconds = 60.0
 scale = 3
 w, h = int(300 * scale), int(100 * scale)
+
+fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+out = cv2.VideoWriter('result/output.mp4', fourcc, 120, (w, h))
 
 with open('result/winner', 'rb') as f:
     genome = pickle.load(f)
@@ -35,15 +39,15 @@ config = neat.Config(
 net = neat.nn.FeedForwardNetwork.create(genome, config)
 sim = cart_pole.CartPole(**initial_values)
 
-while sim.t < 120.0:
+while sim.t < simulation_seconds:
     inputs = sim.get_scaled_state()
     action = net.activate(inputs)
 
     force = cart_pole.discrete_actuator_force(action)
     sim.step(force)
 
-    if abs(sim.x) > 3.5:
-        sim.x = 0
+    if abs(sim.x) > 3.3:
+        sim.x *= -1
 
     cart = gz.rectangle(
         lx=25 * scale,
@@ -99,9 +103,12 @@ while sim.t < 120.0:
     ])
     group.draw(surface)
 
-    img = cv2.UMat(surface.get_npimage())
+    img = surface.get_npimage()
     img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
+    out.write(img)
     cv2.imshow('result', img)
     if cv2.waitKey(1) == ord('q'):
-        exit()
+        break
+
+out.release()
