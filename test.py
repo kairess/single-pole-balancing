@@ -11,8 +11,8 @@ import cart_pole
 initial_values = {
     'x': 0,
     'theta': 23 * math.pi / 180,
-    'dx': 0,
-    'dtheta': 0
+    'dx': 1,
+    'dtheta': 1
 }
 
 scale = 3
@@ -42,7 +42,7 @@ while sim.t < 120.0:
     force = cart_pole.discrete_actuator_force(action)
     sim.step(force)
 
-    if abs(sim.x) > 2.5:
+    if abs(sim.x) > 3.5:
         sim.x = 0
 
     cart = gz.rectangle(
