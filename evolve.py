@@ -107,7 +107,7 @@ def eval_genomes(genomes, config):
                 force_rect
             ])
 
-            star = gz.star(radius=30, fill=(1, 1, 0), xy=(150 * scale, 25 * scale), angle=-math.pi / 2)
+            star = gz.star(radius=10 * scale, fill=(1, 1, 0), xy=(150 * scale, 25 * scale), angle=-math.pi / 2)
 
             pole = gz.rectangle(
                 lx=2.5 * scale,
